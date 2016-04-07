@@ -8,7 +8,7 @@ To allow the user to move the spacecraft anywhere on the screen we will use cons
 
 
 ### Data set or other source materials
-We will be building our own simulation and creating our own data. We will however be using 2D sprits from randowm websites for our game.
+We will be building our own simulation and creating our own data. We will however be using 2D sprites from random websites for our game.
 
 
 ### Deliverable and Demonstration
