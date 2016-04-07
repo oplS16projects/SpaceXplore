@@ -8,7 +8,7 @@ To allow the user to move the spacecraft anywhere on the screen we will use cons
 
 Explain what approaches from class you will bring to bear on the project. Be explicit: e.g., will you use recursion? How? Will you use map/filter/reduce? How? Will you use data abstraction? Will you use object-orientation? Will you use functional approaches to processing your data? Will you use state-modification approaches? A combination?
 
-The idea here is to identify what ideas from the class you will use in carrying out your project. 
+
 
 ### Data set or other source materials
 We will be building our own simulation and creating our own data. We will however be using 2D sprits from randowm websites for our game.
@@ -18,19 +18,22 @@ We will be building our own simulation and creating our own data. We will howeve
 In the end we will have a fully funtional interactive game that will allow the user to contol the spacecraft and move around obstacles. The obstacles will be random so the user will not know where to move the spacecraft. 
 
 
-Will it be interactive? Can you show it working? This project involves a live demo, so interactivity is good.
+
 
 ### Evaluation of Results
 We should be able to run the game without any errors till the end.
 
 
 How will you know if you are successful? 
-If you include some kind of _quantitative analysis,_ that would be good.
+
+We will know if we are successful if a user is able to play the game smoothly without any errors and be able to enjoy it.
 
 ## Architecture Diagram
-Upload the architecture diagram you made for your slide presentation to your repository, and include it in-line here.
+![finalprojdesign](https://cloud.githubusercontent.com/assets/12664198/14360127/db9d94c8-fcc2-11e5-849c-176db2a35bc4.jpg)
 
-Create several paragraphs of narrative to explain the pieces and how they interoperate.
+The way the game will work is the user will start the game and the program will then generate a random objects at random X and Y positions on the screen. These objects will vary is size and the trajectrory. The player will have to either move around or shoot the objects to avoid getting hit. The spacecraft that the user controls will have a health bar so after a certain amount of hits the game will end. 
+
+The game runs in a big loop. It first starts off with a input. This can either be starting the game or pressing the shoot button or a collision. Once this happens, a new frame is generated based on the inputs and the game gets updated. Some things that can get updated are health and if you shoot something then that object goes away.
 
 ## Schedule
 Explain how you will go from proposal to finished product. 
