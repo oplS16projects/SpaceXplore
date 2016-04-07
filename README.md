@@ -31,9 +31,11 @@ We will know if we are successful if a user is able to play the game smoothly wi
 ## Architecture Diagram
 ![finalprojdesign](https://cloud.githubusercontent.com/assets/12664198/14360127/db9d94c8-fcc2-11e5-849c-176db2a35bc4.jpg)
 
-The way the game will work is the user will start the game and the program will then generate a random objects at random X and Y positions on the screen. These objects will vary is size and the trajectrory. The player will have to either move around or shoot the objects to avoid getting hit. The spacecraft that the user controls will have a health bar so after a certain amount of hits the game will end. 
+The way the game will work is the user will start the game and the program will then generate a random objects at random X and Y positions off-screen. These objects will vary is size and trajectrory. The player will have to either move around or shoot the objects to avoid getting hit. The spacecraft that the user controls will have a health bar so after a certain amount of hits the game will end.
 
-The game runs in a big loop. It first starts off with a input. This can either be starting the game or pressing the shoot button or a collision. Once this happens, a new frame is generated based on the inputs and the game gets updated. Some things that can get updated are health and if you shoot something then that object goes away.
+The game runs in a loop.  Every 1/28 seconds (default of 2htdp/Universe) the game updates the positions of the objects based on time and velocity, updates the player position based on input, checks for collisions, and then renders a new frame.  This continues until the player's health gets to 0.
+
+The game objects are a hierarchy of entity objects.  Each entity has a position, sprite, and flag for death (whether or not to render the sprite or check it's coordinates).  Every other object in the game will inherit from this class.  The game loop knows how to render each object based on it's members it inherits from the entity class.
 
 ## Schedule
 Explain how you will go from proposal to finished product. 
