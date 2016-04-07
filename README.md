@@ -6,9 +6,6 @@ We're designing a 2D space shooting game that uses graphics and sound to make it
 ### Analysis
 To allow the user to move the spacecraft anywhere on the screen we will use cons, car and cdr. Use FoldL for handling situations when the health of the spacecraft is low or when the the spacecraft hits an object. Use recusion to create multiple obstacles. We will use inheritance and map .....................
 
-Explain what approaches from class you will bring to bear on the project. Be explicit: e.g., will you use recursion? How? Will you use map/filter/reduce? How? Will you use data abstraction? Will you use object-orientation? Will you use functional approaches to processing your data? Will you use state-modification approaches? A combination?
-
-
 
 ### Data set or other source materials
 We will be building our own simulation and creating our own data. We will however be using 2D sprits from randowm websites for our game.
@@ -21,7 +18,7 @@ In the end we will have a fully funtional interactive game that will allow the u
 
 
 ### Evaluation of Results
-We should be able to run the game without any errors till the end.
+The game should play through with the described gameplay without errors until the player reaches 0 health.
 
 
 How will you know if you are successful? 
@@ -38,35 +35,16 @@ The game runs in a loop.  Every 1/28 seconds (default of 2htdp/Universe) the gam
 The game objects are a hierarchy of entity objects.  Each entity has a position, sprite, and flag for death (whether or not to render the sprite or check it's coordinates).  Every other object in the game will inherit from this class.  The game loop knows how to render each object based on it's members it inherits from the entity class.
 
 ## Schedule
-Explain how you will go from proposal to finished product. 
-
-There are three deliverable milestones to explicitly define, below.
-
-The nature of deliverables depend on your project, but may include things like processed data ready for import, core algorithms implemented, interface design prototyped, etc. 
-
-You will be expected to turn in code, documentation, and data (as appropriate) at each of these stages.
-
-Write concrete steps for your schedule to move from concept to working system. 
-
 ### First Milestone (Fri Apr 15)
-A 2D world with the spacecraft being able to more around in it. 
+A 2D world that accepts input to move a spaceship sprite around the screen.  This signifies the core engine is complete and our concept works. 
 
 ### Second Milestone (Fri Apr 22)
-Add features like health, sound, obstacles 
+Add features like health, sound, obstacles.  Fleshing out the features of the game, at this point we should have solid gameplay.
 
 ### Final Presentation (last week of semester)
 Add more interactive things. Start page/intro.
 
 ## Group Responsibilities
-Here each group member gets a section where they, as an individual, detail what they are responsible for in this project. Each group member writes their own Responsibility section. Include the milestones and final deliverable.
-
-**Additional instructions for teams of three:** 
-* Remember that you must have prior written permission to work in groups of three (specifically, an approved `FP3` team declaration submission).
-* The team must nominate a lead. This person is primarily responsible for code integration. This work may be shared, but the team lead has default responsibility.
-* The team lead has full partner implementation responsibilities also.
-* Identify who is team lead.
-
-In the headings below, replace the silly names and GitHub handles with your actual ones.
 
 ### Lokesh Manchi @lokeshmanchi
 I will write the code that allows the user to move the spacecraft freely to avoid the obsticles and write code for sound.
@@ -76,6 +54,5 @@ For the final milestone I will help create the start page and any other small de
 
 
 ### Rob Russell @robdoesweb
-I will work on creating the 2D world for the game, this includes obsticles 
-
+I'm writing the main game loop and hierarchy for objects.  I'll create the update loop and make design decisions for collision detection and rendering.  I'll focus on creating a clear set of classes that can be reused to expand the game and add more features and content easily.
 
