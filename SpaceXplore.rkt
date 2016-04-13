@@ -7,9 +7,13 @@
 
 (define (game start) 'foo)
 
+;; load resources
+
 (define default-sprite 'someimagehere)
 
-(define (entity x y)
+
+;; entity constructor
+(define (make-entity x y)
   (define xpos x)
   (define ypos y)
   (define sprite default-sprite)
