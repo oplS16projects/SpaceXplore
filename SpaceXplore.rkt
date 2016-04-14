@@ -50,7 +50,7 @@
           ((eq? m 'size) size)
           ((eq? m 'sprite) sprite)
           ((eq? m 'change-sprite) change-sprite)
-          (else "ERROR ENTITY DISPATCH")
+          (else (begin (print "Entity Dispatch") m))
           ))
   dispatch
  )
@@ -128,7 +128,7 @@
 ;;instantiate player object
 (define player (make-player (cons 100 100) (cons 10 10) player-sprite-straight))
 
-(define asteroids (list (make-obstacle (cons 100 100) (cons 50 50) asteroid-sprite)))
+(define asteroids '())
 
 (define (add-asteroids num)
   (define (asteroids-help n count)
@@ -140,6 +140,35 @@
   (asteroids-help num 0)    
 )
 
+(define (make-star)
+  (define new-pos (cons (random window-x) (random window-y)))
+  (define size (+ 1 (random 2)))
+  (define entity (make-entity  new-pos (cons 3 3) (circle size "solid" "white")))
+  (define speed (* 6 size))
+  (print new-pos)
+  (define (update dt)
+    (cond ((> (entity 'y) 0)
+           ((entity 'set-y) (- (entity 'y) speed)))
+          (else ((entity 'set-y) window-y))))
+ 
+
+  (define (dispatch m)
+    (cond ((eq? m 'update) update)
+          (else (entity m))))
+  dispatch
+  )
+
+(define starfield (list (make-star)))
+  
+(define (make-starfield n)
+  (define (starfield-help n count)
+    (cond ((> n count) (begin
+                         (set! starfield (append starfield (list (make-star))))
+                         (starfield-help n (+ 1 count))))))
+  (starfield-help n 0))
+
+(make-starfield 30)
+
 (add-asteroids 5)
 
 (define (update dt)
@@ -148,6 +177,9 @@
 
   ;;update asteroids
   (map (λ (asteroid) ((asteroid 'update) 0)) asteroids)
+  ;;update starfield
+  (map (λ (star) ((star 'update) 0)) starfield)
+
   )
 
 (define (handle-key-down world key)
@@ -173,7 +205,12 @@
 (define (render x)
   (define asteroids-pos (map (λ (asteroid) (make-posn (asteroid 'x) (asteroid 'y))) asteroids))
   (define asteroids-sprites (map (λ (asteroid) (asteroid 'sprite)) asteroids))
-  (place-images asteroids-sprites asteroids-pos (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite)))
+  (define stars-pos (map (λ (star) (make-posn (star 'x) (star 'y))) starfield))
+  (define stars-sprites (map (λ (star) (star 'sprite)) starfield))
+  (define bg (rectangle 600 800 "solid" "black"))
+  (define stars-bg (place-images stars-sprites stars-pos bg))
+  (define player-stars-bg (underlay/xy stars-bg (player 'x) (player 'y) (player 'sprite)))
+  (place-images asteroids-sprites asteroids-pos player-stars-bg)
 )
   
 ;  (define scene (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite)))
