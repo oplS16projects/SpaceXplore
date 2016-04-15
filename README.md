@@ -35,8 +35,11 @@ The game runs in a loop.  Every 1/28 seconds (default of 2htdp/Universe) the gam
 The game objects are a hierarchy of entity objects.  Each entity has a position, sprite, and flag for death (whether or not to render the sprite or check it's coordinates).  Every other object in the game will inherit from this class.  The game loop knows how to render each object based on it's members it inherits from the entity class.
 
 ## Schedule
+### Current Progess: Milestone one is complete and working. We have created a 2D world that randomly creates projectiles/asteriods and also a user interface that allows the user to be able to control the spacecraft to maneuver around the obsticles. Parts of milestone two have already been coded but are not included in the first submition.
+
 ### First Milestone (Fri Apr 15)
 A 2D world that accepts input to move a spaceship sprite around the screen.  This signifies the core engine is complete and our concept works. 
+
 
 ### Second Milestone (Fri Apr 22)
 Add features like health, sound, obstacles.  Fleshing out the features of the game, at this point we should have solid gameplay.
