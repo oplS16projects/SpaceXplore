@@ -5,8 +5,6 @@
 
 (require 2htdp/universe 2htdp/image lang/posn)
 
-
-
 ;;game state variables
 (define window-x 600)
 (define window-y 800)
@@ -16,9 +14,13 @@
 
 ;; load resources
 (define star (circle 2 "solid" "white"))
-(define player-sprite-straight (rotate 180 (bitmap "Plane.png")))
+(define player-sprite-straight (bitmap "Plane.png"))
 (define asteroid-sprite (bitmap "Asteroid1.png"))
+(define background (bitmap "background.jpg"))
 
+;;all the entities in the game
+(define obstacles '())
+(define projectiles '())
 
 ;; entity constructor
 ;; takes pos - (cons (x y)) and size (cons (w h)) for collision detection
@@ -34,6 +36,9 @@
   (define (set-size new-size) (set! size new-size))
   (define (change-sprite new-sprite)
     (set! sprite new-sprite))
+  (define alive #t)
+  (define (kill) (set! alive #f))
+  (define (wake-up pos) (begin (set-pos pos) (set! alive #t)))
 
   (define (dispatch m)
     (cond ((eq? m 'x) (car pos))
@@ -49,11 +54,20 @@
           ((eq? m 'pos) pos)
           ((eq? m 'size) size)
           ((eq? m 'sprite) sprite)
+          ((eq? m 'alive?) alive)
           ((eq? m 'change-sprite) change-sprite)
           (else (begin (print "Entity Dispatch") m))
           ))
   dispatch
  )
+
+;;find the first dead entity in a list
+(define (first-dead ents)
+  (if (eqv? ents '())
+      #f
+      (if ((car ents) 'alive?)
+          (car ents)
+          (first-dead (cdr ents)))))
 
 ;;obstacle constructor
 (define (make-obstacle pos size sprite)
@@ -67,22 +81,14 @@
   dispatch
   )
 
-;;star background constructor
-(define (make-stars n)
-        
-  
-  'foo)
-
-;;star background handler
-(define stars (make-stars 30))
-
 (define projectiles '())
 ;;PLAYER CLASS
 ;; instantiated only once
 (define (make-player pos size sprite)
   (define entity (make-entity pos size sprite))
   (define speed 5)
-
+  (define health 100)
+  (define power 5)
   (define going-up #f)
   (define going-down #f)
   (define going-left #f)
@@ -106,8 +112,9 @@
            ((entity 'set-y) (+ speed (entity 'y)))))
     )
   (define (shoot)
-    (set! projectiles (append projectiles (list (make-projectile))))
-    (print "pew pew")
+    (if (< power 1)
+        #f
+        (set! projectiles (append projectiles (list (make-projectile))))
     )
   
   (define (update dt)
@@ -141,7 +148,7 @@
     (cond ((> n count) (begin
                          (define new-pos (cons (random window-x) (+ window-y (random window-y))))
                          (define size (cons 50 50))
-                         (set! asteroids (append asteroids (list (make-obstacle new-pos size asteroid-sprite))))
+                         (set! asteroids (append asteroids (list (make-obstacle new-pos size (rotate (random 359) asteroid-sprite)))))
                          (asteroids-help n (+ 1 count))))))
   (asteroids-help num 0)    
 )
@@ -164,6 +171,26 @@
   dispatch
   )
 
+;if (rect1.x < rect2.x + rect2.width &&
+;   rect1.x + rect1.width > rect2.x &&
+;   rect1.y < rect2.y + rect2.height &&
+;   rect1.height + rect1.y > rect2.y) {
+;    // collision detected!
+;}
+
+(define (collides obj1 obj2)
+  (define x1 (obj1 'x))
+  (define y1 (obj1 'y))
+  (define h1 (obj1 'h))
+  (define w1 (obj1 'w))
+  (define x2 (obj2 'x))
+  (define y2 (obj2 'y))
+  (define h2 (obj2 'h))
+  (define w2 (obj2 'w))
+  (if (and (< x1 (+ x2 w2)) (< x2 (+ x1 w1)) (< y2 (+ y1 h1)) (< y1 (+ y2 h2)))
+      #t
+      #f))
+
 (define starfield (list (make-star)))
   
 (define (make-starfield n)
@@ -180,7 +207,7 @@
 (add-asteroids 5)
 
 (define (make-projectile)
-  (define pos (cons (+ 25 (player 'x)) (player 'y)))
+  (define pos (cons (+ 25 (player 'x)) (+ 50 (player 'y))))
   (define speed 15)
   (define entity (make-entity pos (cons 2 4) (rectangle 4 15 "solid" "red")))
   (define (update dt)
@@ -202,6 +229,10 @@
   (map (λ (star) ((star 'update) 0)) starfield)
   ;;update projectiles
   (map (λ (proj) ((proj 'update) 0)) projectiles)
+
+  ;;check collisions
+
+  
 
   )
 
@@ -226,6 +257,9 @@
     )
 )
 
+(define (alive? ent)
+  (eq? (ent 'alive?) #t))
+
 (define (render x)
   (define asteroids-pos (map (λ (asteroid) (make-posn (asteroid 'x) (asteroid 'y))) asteroids))
   (define asteroids-sprites (map (λ (asteroid) (asteroid 'sprite)) asteroids))
@@ -233,10 +267,11 @@
   (define stars-sprites (map (λ (star) (star 'sprite)) starfield))
   (define projectile-pos (map (λ (proj) (make-posn (proj 'x) (proj 'y))) projectiles))
   (define projectile-sprites (map (λ (proj) (proj 'sprite)) projectiles))
-  (define bg (rectangle 600 800 "solid" "black"))
+  (define bg background)
   (define stars-bg (place-images stars-sprites stars-pos bg))
   (define player-stars-bg (underlay/xy stars-bg (player 'x) (player 'y) (player 'sprite)))
   (define player-stars-bg-proj (place-images projectile-sprites projectile-pos player-stars-bg))
+  ;(define player-stars-bg-proj-ui (underlay/xy player-stars-bg-proj x y sprite)
   (place-images asteroids-sprites asteroids-pos player-stars-bg-proj)
 )
   
