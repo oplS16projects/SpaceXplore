@@ -4,6 +4,7 @@
 #lang racket
 
 (require 2htdp/universe 2htdp/image lang/posn)
+(require rsound)
 
 ;;game state variables
 (define window-x 600)
@@ -21,6 +22,7 @@
 ;;all the entities in the game
 (define obstacles '())
 (define projectiles '())
+
 
 ;; entity constructor
 ;; takes pos - (cons (x y)) and size (cons (w h)) for collision detection
@@ -134,9 +136,36 @@
           ((eq? m 'stop-down) (set! going-down #f))
           ((eq? m 'stop-left) (set! going-left #f))
           ((eq? m 'stop-right) (set! going-right #f))
-          ((eq? m 'shoot) (shoot))
+          ((eq? m 'shoot) (shoot)(shoot2))
           (else (entity m))))
   dispatch)
+
+  (define(full-health)
+    (place-image  (overlay(rectangle 200 30 "outline" "black")
+        (rectangle 200 30 "solid" "red"))  100 100 (overlay(rectangle 200 30 "outline" "black")
+        (rectangle 200 30 "solid" "red"))))
+  (define (hit-once)
+      (overlay(text "health" 18 "black")(rectangle 200 30 "outline" "black")
+        (rectangle 120 30 "solid" "red")))
+  (define (hit-twice)
+        (overlay(text "health" 18 "black")(rectangle 200 30 "outline" "black")
+                (rectangle 55 30 "solid" "red")))
+  (define (hit-3)
+    (error "end of game"))
+ 
+   
+  
+;; sounds
+(define(shoot2)
+  (define shoot1(rs-read "shoot.wav")) (play shoot1))
+(define (explosion)
+  (define explosion1(rs-read "explosion2.wav"))(play explosion1))
+
+
+
+
+
+
 
 ;;instantiate player object
 (define player (make-player (cons 100 100) (cons 10 10) player-sprite-straight))
@@ -204,7 +233,12 @@
 (make-starfield 50)
 
 ;;add asteroids - this needs to be updated to create asteriods at specific intervals
-(add-asteroids 5)
+
+  
+                 
+
+;(add-asteroids 10)
+;(add-asteroids 20)
 
 (define (make-projectile)
   (define pos (cons (+ 25 (player 'x)) (+ 50 (player 'y))))
@@ -232,9 +266,6 @@
 
   ;;check collisions
 
-  
-
-  )
 
 (define (handle-key-down world key)
   (cond
@@ -268,8 +299,10 @@
   (define projectile-pos (map (λ (proj) (make-posn (proj 'x) (proj 'y))) projectiles))
   (define projectile-sprites (map (λ (proj) (proj 'sprite)) projectiles))
   (define bg background)
+  (define rec(rectangle 400 500 "solid" "red"))
   (define stars-bg (place-images stars-sprites stars-pos bg))
   (define player-stars-bg (underlay/xy stars-bg (player 'x) (player 'y) (player 'sprite)))
+  ;(define player-health(underlay/xy player-stars-bg))
   (define player-stars-bg-proj (place-images projectile-sprites projectile-pos player-stars-bg))
   ;(define player-stars-bg-proj-ui (underlay/xy player-stars-bg-proj x y sprite)
   (place-images asteroids-sprites asteroids-pos player-stars-bg-proj)
