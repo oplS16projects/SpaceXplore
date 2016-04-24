@@ -159,8 +159,6 @@
           (rectangle 55 30 "solid" "red")))
 (define (hit-3)
   (error "end of game"))
- 
-   
   
 ;; sounds
 
