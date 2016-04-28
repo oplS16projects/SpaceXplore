@@ -11,7 +11,7 @@
 
 ;;game state variables
 (define window-x 600)
-(define window-y 800)
+(define window-y 600)
 
 ;;random seed
 (define random-gen (make-pseudo-random-generator))
@@ -79,18 +79,6 @@
           (car ents)
           (first-dead (cdr ents)))))
 
-;;healthbar
-(define (healthbar)
-  (define (health-sprite) (overlay (rectangle 200 30 "outline" "white")
-                                   (rectangle (* 2 (player 'health)) 30 "solid" "red")))
-  (define entity (make-entity (cons 300 20) (cons 0 0) (rectangle 200 30 "outline" "black") #f))
-  (define (dispatch m)
-    (if (eq? m 'sprite)
-        (health-sprite)
-        (entity m)))
-  dispatch)
-
-(set! ents (append ents (list (healthbar))))
 
 
 
@@ -126,7 +114,7 @@
            ((entity 'set-x) (-  (entity 'x) 10))))
     )
   (define (go-right)
-    (cond ((< (entity 'x) (- window-x 50))
+    (cond ((< (entity 'x) window-x)
            ((entity 'set-x) (+ (entity 'x) 10))))
     )
   (define (go-up)
@@ -162,23 +150,11 @@
           ((eq? m 'stop-right) (set! going-right #f))
           ((eq? m 'decrease-health) (set! health (- health 20)))
           ((eq? m 'up-score) (set! score (+ score 10)))
+          ((eq? m 'score) score)
           ((eq? m 'health) health)
           ((eq? m 'shoot) (begin (shoot) (shoot2)))
           (else (entity m))))
   dispatch)
-
-(define(full-health)
-  (overlay(rectangle 200 30 "outline" "black")
-          (rectangle 200 30 "solid" "red"))  100 100 (overlay(rectangle 200 30 "outline" "black")
-                                                             (rectangle 200 30 "solid" "red")))
-(define (hit-once)
-  (overlay(text "health" 18 "black")(rectangle 200 30 "outline" "black")
-          (rectangle 120 30 "solid" "red")))
-(define (hit-twice)
-  (overlay(text "health" 18 "black")(rectangle 200 30 "outline" "black")
-          (rectangle 55 30 "solid" "red")))
-(define (hit-3)
-  (error "end of game"))
 
 ;; sounds
 (define astream (make-pstream))
@@ -193,6 +169,32 @@
 ;;instantiate player object
 (define player (make-player (cons 100 100) (cons 10 10) player-sprite-straight))
 
+;;healthbar
+(define (healthbar)
+  (define (health-sprite) (overlay (rectangle 200 30 "outline" "white")
+                                   (rectangle (* 2 (player 'health)) 30 "solid" "red")))
+  (define entity (make-entity (cons 450 20) (cons 0 0) (rectangle 200 30 "outline" "black") #f))
+  (define (dispatch m)
+    (if (eq? m 'sprite)
+        (health-sprite)
+        (entity m)))
+  dispatch)
+
+(set! ents (append ents (list (healthbar))))
+
+;;score printout
+(define (score)
+  (define (score-sprite) (text (~a (player 'score)) 24 "white"))
+  (define entity (make-entity (cons 20 20) (cons 0 0) (score-sprite) #f))
+  (define (dispatch m)
+    (if (eq? m 'sprite)
+        (score-sprite)
+        (entity m)))
+  dispatch)
+
+(set! ents (append ents (list (score))))
+
+;;asteroids
 (define asteroids '())
 
 (define (add-asteroids num)
@@ -303,26 +305,32 @@
 (define ticks 0)
 (define seconds 1)
 
+(define game-over #f)
+
 (define (update dt)
-  ;;update player positions
-  ((player 'update) dt)
-  
-  ;;update asteroids
-  (map (λ (asteroid) ((asteroid 'update) 0)) asteroids)
-  ;;update starfield
-  (map (λ (star) ((star 'update) 0)) starfield)
-  ;;update projectiles
-  (map (λ (proj) ((proj 'update) 0)) projectiles)
-  
-  (set! ticks (+ 1 ticks))
-  (set! seconds (+ 1/28 seconds))
-  (if (eq? (modulo ticks 140) 0)
-      (add-asteroids 5)
-      #f
-      )
-  
-  ;;check collisions
-  (check-collisions)
+
+  (if (> (player 'health) 0)
+      (begin
+        ;;update player positions
+        ((player 'update) dt)
+        
+        ;;update asteroids
+        (map (λ (asteroid) ((asteroid 'update) 0)) asteroids)
+        ;;update starfield
+        (map (λ (star) ((star 'update) 0)) starfield)
+        ;;update projectiles
+        (map (λ (proj) ((proj 'update) 0)) projectiles)
+        
+        (set! ticks (+ 1 ticks))
+        (set! seconds (+ 1/28 seconds))
+        (if (eq? (modulo ticks 140) 0)
+            (add-asteroids (round (/ seconds 3)))
+            #f
+            )
+        
+        ;;check collisions
+        (check-collisions))
+      (set! game-over #t))
   
   ;;get rid of unused entities
   (clean-up)
@@ -369,7 +377,13 @@
   ;(define player-stars-bg-proj-ui (underlay/xy player-stars-bg-proj x y sprite)
   (define ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
   (define ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
-  (place-images ents-sprites ents-pos background)
+  (define screen '())
+  (set! screen (place-images ents-sprites ents-pos background))
+  (define game-over-text (text "GAME OVER!!! YOU DIED!!!" 36 "red"))
+  (if game-over
+      (set! screen (place-images (list game-over-text) (list (make-posn 250 250)) background))
+      void)
+  screen
   )
 
 ;  (define scene (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite)))
