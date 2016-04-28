@@ -45,6 +45,11 @@ Anything else you want to say in your report. Can rename or remove this section.
 
 #How to Download and Run
 You may want to link to your latest release for easy downloading by people (such as Mark).
+1. Click on release at the top of the page and download the most recent release
+2. After downloading the file extract it and place it anywhere
+3. Install rsound library on your computer throught the Dr.Racket package manager
+4. In the project release click on SpaceXplore.rkt, which is the file that starts the game
+5. A starter page will open up and you have to click on the right arrow key to initialize the game (first image in the screenshot section of this file)
+6. A second window will pop up (second image in the screenshot section) and this is the game. The controls are the arrow keys to move around and the space bar to shoot
+7. Dont get hit!
 
-The file you should run is called SpaceXplore.rxt
-When you run the program a window will pop up (first image on the screenshot section of this file) you have to press the right arrow key. This will then start the game. You can move the spaceship around by using the arrow keys and the space to shoot. The point of the game is to avoid the asteriods by shooting them of moving around them. Just don't get hit!
