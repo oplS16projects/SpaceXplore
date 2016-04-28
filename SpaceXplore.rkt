@@ -45,7 +45,7 @@
   (define alive #t)
   (define (kill) (set! alive #f))
   (define (wake-up pos) (begin (set-pos pos) (set! alive #t)))
-
+  
   (define (dispatch m)
     (cond ((eq? m 'x) (car pos))
           ((eq? m 'y) (cdr pos))
@@ -69,7 +69,7 @@
   
   (set! ents (append ents (list dispatch)))
   dispatch
- )
+  )
 
 ;;find the first dead entity in a list
 (define (first-dead ents)
@@ -84,7 +84,7 @@
   (define entity (make-entity pos size sprite #t))
   (define (update dt)
     ((entity 'set-y) (- (entity 'y) 5)))
-
+  
   (define (dispatch m)
     (cond ((eq? m 'update) update)
           ((eq? m 'collidable) #t)
@@ -125,14 +125,14 @@
     (if (< power 1)
         #f
         (set! projectiles (append projectiles (list (make-projectile))))
-    ))
+        ))
   
   (define (update dt)
     (cond (going-left (go-left)))
     (cond (going-right (go-right)))
     (cond (going-up (go-up)))
     (cond (going-down (go-down)))
-  )
+    )
   
   (define (dispatch m)
     (cond ((eq? m 'update) update)
@@ -162,7 +162,7 @@
           (rectangle 55 30 "solid" "red")))
 (define (hit-3)
   (error "end of game"))
-  
+
 ;; sounds
 (define astream (make-pstream))
 (define shoot1(rs-read "shoot.wav"))
@@ -186,7 +186,7 @@
                          (set! asteroids (append asteroids (list (make-obstacle new-pos size (rotate (random 359) asteroid-sprite)))))
                          (asteroids-help n (+ 1 count))))))
   (asteroids-help num 0)    
-)
+  )
 
 ;;starfield for background
 
@@ -199,8 +199,8 @@
     (cond ((> (entity 'y) 0)
            ((entity 'set-y) (- (entity 'y) speed)))
           (else ((entity 'set-y) window-y))))
- 
-
+  
+  
   (define (dispatch m)
     (cond ((eq? m 'update) update)
           (else (entity m))))
@@ -208,7 +208,7 @@
   )
 
 (define starfield (list (make-star)))
-  
+
 (define (make-starfield n)
   (define (starfield-help n count)
     (cond ((> n count) (begin
@@ -225,7 +225,7 @@
   (define entity (make-entity pos (cons 4 15) (rectangle 4 15 "solid" "red") #f))
   (define (update dt)
     ((entity 'set-y) (+ speed (entity 'y))))
-
+  
   (define (dispatch m)
     (cond ((eq? m 'update) update)
           (else (entity m))))
@@ -289,27 +289,27 @@
 (define (update dt)
   ;;update player positions
   ((player 'update) dt)
-
+  
   ;;update asteroids
   (map (λ (asteroid) ((asteroid 'update) 0)) asteroids)
   ;;update starfield
   (map (λ (star) ((star 'update) 0)) starfield)
   ;;update projectiles
   (map (λ (proj) ((proj 'update) 0)) projectiles)
-
+  
   (set! ticks (+ 1 ticks))
   (set! seconds (+ 1/28 seconds))
   (if (eq? (modulo ticks 140) 0)
       (add-asteroids 5)
       #f
-  )
-
+      )
+  
   ;;check collisions
   (check-collisions)
-
+  
   ;;get rid of unused entities
   (clean-up)
-)
+  )
 
 (define (handle-key-down world key)
   (cond
@@ -320,7 +320,7 @@
     [(key=? key " ") (player 'shoot)]
     [else world]
     )
-)
+  )
 
 (define (handle-key-up world key)
   (cond
@@ -330,55 +330,60 @@
     [(key=? key "down") (player 'stop-down)]
     [else world]
     )
-)
+  )
 
 ;;to filter if enemies should be rendered
 (define (alive? ent)
   (eq? (ent 'alive?) #t))
 
 (define (render x)
-;  (define asteroids-pos (map (λ (asteroid) (make-posn (asteroid 'x) (asteroid 'y))) (filter alive? asteroids)))
-;  (define asteroids-sprites (map (λ (asteroid) (asteroid 'sprite)) (filter alive? asteroids)))
-;  (define stars-pos (map (λ (star) (make-posn (star 'x) (star 'y))) starfield))
-;  (define stars-sprites (map (λ (star) (star 'sprite)) starfield))
-;  (define projectile-pos (map (λ (proj) (make-posn (proj 'x) (proj 'y))) (filter alive? projectiles)))
-;  (define projectile-sprites (map (λ (proj) (proj 'sprite)) (filter alive? projectiles)))
-;  (define bg background)
-;  (define rec(rectangle 400 500 "solid" "red"))
-;  (define stars-bg (place-images stars-sprites stars-pos bg))
-;  (define player-stars-bg (underlay/xy stars-bg (player 'x) (player 'y) (player 'sprite)))
-;  ;(define player-health(underlay/xy player-stars-bg))
-;  (define player-stars-bg-proj (place-images projectile-sprites projectile-pos player-stars-bg))
+  ;  (define asteroids-pos (map (λ (asteroid) (make-posn (asteroid 'x) (asteroid 'y))) (filter alive? asteroids)))
+  ;  (define asteroids-sprites (map (λ (asteroid) (asteroid 'sprite)) (filter alive? asteroids)))
+  ;  (define stars-pos (map (λ (star) (make-posn (star 'x) (star 'y))) starfield))
+  ;  (define stars-sprites (map (λ (star) (star 'sprite)) starfield))
+  ;  (define projectile-pos (map (λ (proj) (make-posn (proj 'x) (proj 'y))) (filter alive? projectiles)))
+  ;  (define projectile-sprites (map (λ (proj) (proj 'sprite)) (filter alive? projectiles)))
+  ;  (define bg background)
+  ;  (define rec(rectangle 400 500 "solid" "red"))
+  ;  (define stars-bg (place-images stars-sprites stars-pos bg))
+  ;  (define player-stars-bg (underlay/xy stars-bg (player 'x) (player 'y) (player 'sprite)))
+  ;  ;(define player-health(underlay/xy player-stars-bg))
+  ;  (define player-stars-bg-proj (place-images projectile-sprites projectile-pos player-stars-bg))
   ;(define player-stars-bg-proj-ui (underlay/xy player-stars-bg-proj x y sprite)
   (define ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
   (define ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
   (place-images ents-sprites ents-pos background)
-)
-  
+  )
+
 ;  (define scene (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite)))
 ;  (map (λ (asteroid)
 ;  (set! scene underlay/xy (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite))
 ;               (asteroid 'x) (asteroid 'y) (asteroid 'sprite))) asteroids)
-  
-  
 
+
+(define playing #f)
+
+(define (check-playing x)
+  (if playing #t #f))
 
 ;;game initialization
+(define start-text (text "Press [space] to start!" 24 "white"))
 (define (game-start n)
-  (if ((eqv? n 'true)
-(big-bang 0
-          (on-tick update)
-          (on-key handle-key-down)
-          (on-release handle-key-up)
-          (to-draw render)))
-      error "error"))
-          
-          (define background1 (overlay (bitmap "text.png")(bitmap "space-1.jpg")))
+  (if (eqv? n 'true)
+      (begin (set! playing #t) (big-bang 0
+                       (on-tick update)
+                       (on-key handle-key-down)
+                       (on-release handle-key-up)
+                       (to-draw render)))
+      (error "error")))
+
+(define background1 (underlay/xy (overlay (bitmap "text.png")(bitmap "space-1.jpg")) 475 450 start-text))
 
 ;;; starter page
+
 (define star1
   (star-polygon 40 7 3 "outline" "darkred"))
-(define page
+(define page 
   (overlay star1 (circle (image-width star) "solid" "white")))
 (define page-speed (/ 900 100))
 (define (rotate-second im)
@@ -388,7 +393,7 @@
 
 (define(change w a-key)
   (cond
-    [(key=? a-key "right") ((game-start true))]
+    [(key=? a-key " ") ((game-start 'true))]
     [else w]))
 
 (define (render1 st)
@@ -398,6 +403,7 @@
 (big-bang 0
           (on-tick add1)
           (on-key change)
-          (to-draw render1))
-          
+          (to-draw render1)
+          )
+
 
