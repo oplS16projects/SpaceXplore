@@ -79,6 +79,21 @@
           (car ents)
           (first-dead (cdr ents)))))
 
+;;healthbar
+(define (healthbar)
+  (define (health-sprite) (overlay (rectangle 200 30 "outline" "white")
+                                   (rectangle (* 2 (player 'health)) 30 "solid" "red")))
+  (define entity (make-entity (cons 300 20) (cons 0 0) (rectangle 200 30 "outline" "black") #f))
+  (define (dispatch m)
+    (if (eq? m 'sprite)
+        (health-sprite)
+        (entity m)))
+  dispatch)
+
+(set! ents (append ents (list (healthbar))))
+
+
+
 ;;obstacle constructor
 (define (make-obstacle pos size sprite)
   (define entity (make-entity pos size sprite #t))
@@ -97,6 +112,7 @@
 (define (make-player pos size sprite)
   (define entity (make-entity pos size sprite #f))
   (define speed 5)
+  (define score 0)
   (define health 100)
   (define power 5)
   (define going-up #f)
@@ -145,15 +161,16 @@
           ((eq? m 'stop-left) (set! going-left #f))
           ((eq? m 'stop-right) (set! going-right #f))
           ((eq? m 'decrease-health) (set! health (- health 20)))
+          ((eq? m 'up-score) (set! score (+ score 10)))
           ((eq? m 'health) health)
           ((eq? m 'shoot) (begin (shoot) (shoot2)))
           (else (entity m))))
   dispatch)
 
 (define(full-health)
-  (place-image  (overlay(rectangle 200 30 "outline" "black")
-                        (rectangle 200 30 "solid" "red"))  100 100 (overlay(rectangle 200 30 "outline" "black")
-                                                                           (rectangle 200 30 "solid" "red"))))
+  (overlay(rectangle 200 30 "outline" "black")
+          (rectangle 200 30 "solid" "red"))  100 100 (overlay(rectangle 200 30 "outline" "black")
+                                                             (rectangle 200 30 "solid" "red")))
 (define (hit-once)
   (overlay(text "health" 18 "black")(rectangle 200 30 "outline" "black")
           (rectangle 120 30 "solid" "red")))
@@ -217,7 +234,7 @@
   (starfield-help n 0))
 
 ;;create starfield with n stars
-(make-starfield 50)
+(make-starfield 10)
 
 (define (make-projectile)
   (define pos (cons (player 'x) (player 'y)))
@@ -265,7 +282,7 @@
   (map
    (λ (collidable) (map
                     (λ (projectile) (if (collides collidable projectile)
-                                        (begin (projectile 'kill) (collidable 'kill) (remove projectile projectiles) (remove collidable ents) (explosion))
+                                        (begin (projectile 'kill) (player 'up-score) (collidable 'kill) (remove projectile projectiles) (remove collidable ents) (explosion))
                                         #f)) (filter alive? projectiles))) collidables))
 
 ;;clean up erases asteroids and projectiles that go off screen
@@ -360,21 +377,17 @@
 ;  (set! scene underlay/xy (underlay/xy (rectangle 600 800 "solid" "black") (player 'x) (player 'y) (player 'sprite))
 ;               (asteroid 'x) (asteroid 'y) (asteroid 'sprite))) asteroids)
 
+;;game initialization
 
 (define playing #f)
-
-(define (check-playing x)
-  (if playing #t #f))
-
-;;game initialization
 (define start-text (text "Press [space] to start!" 24 "white"))
 (define (game-start n)
   (if (eqv? n 'true)
       (begin (set! playing #t) (big-bang 0
-                       (on-tick update)
-                       (on-key handle-key-down)
-                       (on-release handle-key-up)
-                       (to-draw render)))
+                                         (on-tick update)
+                                         (on-key handle-key-down)
+                                         (on-release handle-key-up)
+                                         (to-draw render)))
       (error "error")))
 
 (define background1 (underlay/xy (overlay (bitmap "text.png")(bitmap "space-1.jpg")) 475 450 start-text))
