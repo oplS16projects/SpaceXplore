@@ -45,14 +45,19 @@ This code allows the user to use the arrow keys on thier keyboard to interact wi
 )
 ```
 ####Rob Russell (another team member)
-This expression reads in a regular expression and elegantly matches it against a pre-existing hashmap....
+The render function filters through alive entities and maps their positions and sprites to new lists used to render everything in one sweet step.
 ```scheme
-(let* ((expr (convert-to-regexp (read-line my-in-port)))
-             (matches (flatten
-                       (hash-map *words*
-                                 (lambda (key value)
-                                   (if (regexp-match expr key) key '()))))))
-  matches)
+(define (render x)
+  (define ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
+  (define ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
+  (define screen '())
+  (set! screen (place-images ents-sprites ents-pos background))
+  (define game-over-text (text "GAME OVER!!! YOU DIED!!!" 36 "red"))
+  (if game-over
+      (set! screen (place-images (list game-over-text) (list (make-posn 250 250)) background))
+      void)
+  screen
+  )
 ```
 
 ##Additional Remarks
