@@ -30,8 +30,8 @@ Briefly describe the existing technology you utilized, and how you used it. Prov
 
 ##Favorite Scheme Expressions
 ####Lokesh Manchi (a team member)
-Each team member should identify a favorite expression or procedure, written by them, and explain what it does. Why is it your favorite? What OPL philosophy does it embody?
-Remember code looks something like this:
+
+This code allows the user to use the arrow keys on thier keyboard to interact with the game. The way it works is if the player hits lets say the right key, in the cond statement it hits the key=? key "right". This tells Racket to then call the key-expr function which in this case is (player 'move-right) on the current world. The result of the call is the current world.
 ```scheme
 (define (handle-key-down world key)
   (cond
