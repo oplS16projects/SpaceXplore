@@ -5,6 +5,9 @@
 
 (require 2htdp/universe 2htdp/image lang/posn)
 (require rsound)
+(require picturing-programs)
+(require test-engine/racket-tests)
+(provide game-start)
 
 ;;game state variables
 (define window-x 600)
@@ -361,9 +364,40 @@
 
 
 ;;game initialization
+(define (game-start n)
+  (if ((eqv? n 'true)
 (big-bang 0
           (on-tick update)
           (on-key handle-key-down)
           (on-release handle-key-up)
-          (to-draw render))
+          (to-draw render)))
+      error "error"))
+          
+          (define background1 (overlay (bitmap "text.png")(bitmap "space-1.jpg")))
+
+;;; starter page
+(define star1
+  (star-polygon 40 7 3 "outline" "darkred"))
+(define page
+  (overlay star1 (circle (image-width star) "solid" "white")))
+(define page-speed (/ 900 100))
+(define (rotate-second im)
+  (rotate (* 2 page-speed) im))
+
+(check-expect (rotate-second star1) (rotate (* 2 page-speed) star1))
+
+(define(change w a-key)
+  (cond
+    [(key=? a-key "right") ((game-start true))]
+    [else w]))
+
+(define (render1 st)
+  (overlay (rotate (* 2 page-speed st) star1)
+           background1))
+
+(big-bang 0
+          (on-tick add1)
+          (on-key change)
+          (to-draw render1))
+          
 

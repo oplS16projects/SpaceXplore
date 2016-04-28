@@ -1,62 +1,71 @@
-# Project Title: SpaceXplore
+# FP7-webpage SpaceXplore
 
-### Statement
-We're designing a 2D space shooting game that uses graphics and sound to make it fun and interesting. The user will be able to control a spaceship and the purpose of the game is to avoid the obstacles that are ahead. 
+##Authors
+Lokesh Manchi (@lokeshmanchi)
 
-### Analysis
-To allow the user to move the spacecraft anywhere on the screen we will use cons, car and cdr. Use FoldL for handling situations when the health of the spacecraft is low or when the the spacecraft hits an object. Use recusion to create multiple obstacles. We will use map to update the position of the asteroids, shooting and the starfield.
+Rob Russell(@robdoesweb)
 
+##Overview
+We're designing a 2D space shooting game that uses graphics and sound to make it fun and interesting. The user will be able to control a spaceship and the purpose of the game is to avoid the obstacles that are ahead.
 
-### Data set or other source materials
-We will be building our own simulation and creating our own data. We will however be using 2D sprites from random websites for our game.
-
-
-### Deliverable and Demonstration
-In the end we will have a fully funtional interactive game that will allow the user to contol the spacecraft and move around obstacles. The obstacles will be random so the user will not know where to move the spacecraft. 
+##Screenshot
+![screenshot showing game-start](startpage-everything.png)
+![screenshot showing game-play](game-play.png)
 
 
+##Concepts Demonstrated
+Identify the OPL concepts demonstrated in your project. Be brief. A simple list and example is sufficient. 
+* **Data abstraction** is used to provide access to the elements of the RSS feed.
+* The objects in the OpenGL world are represented with **recursive data structures.**
+* **Symbolic language processing techniques** are used in the parser.
 
+##External Technology and Libraries
+Briefly describe the existing technology you utilized, and how you used it. Provide a link to that technology(ies).
+####Libraries used:
 
-### Evaluation of Results
-The game should play through with the described gameplay without errors until the player reaches 0 health.
+1. 2htdp/universe - [Racket-Universe](https://docs.racket-lang.org/teachpack/2htdpuniverse.html)
+2. 2htdp/image - [Racket-Images](https://docs.racket-lang.org/teachpack/2htdpimage.html)
+3. rsound - [Racket-Rsound] (https://docs.racket-lang.org/rsound/index.html)
+4. lang/posn
 
+##Favorite Scheme Expressions
+####Lokesh Manchi (a team member)
+Each team member should identify a favorite expression or procedure, written by them, and explain what it does. Why is it your favorite? What OPL philosophy does it embody?
+Remember code looks something like this:
+```scheme
+(define (handle-key-down world key)
+  (cond
+    [(key=? key "left") (player 'move-left)]
+    [(key=? key "right") (player 'move-right)]
+    [(key=? key "up") (player 'move-up)]
+    [(key=? key "down") (player 'move-down)]
+    [(key=? key " ") (player 'shoot)]
+    [else world]
+    )
+)
+```
+####Rob Russell (another team member)
+This expression reads in a regular expression and elegantly matches it against a pre-existing hashmap....
+```scheme
+(let* ((expr (convert-to-regexp (read-line my-in-port)))
+             (matches (flatten
+                       (hash-map *words*
+                                 (lambda (key value)
+                                   (if (regexp-match expr key) key '()))))))
+  matches)
+```
 
-How will you know if you are successful? 
+##Additional Remarks
+Anything else you want to say in your report. Can rename or remove this section.
 
-We will know if we are successful if a user is able to play the game smoothly without any errors and be able to enjoy it.
+#How to Download and Run
+You may want to link to your latest release for easy downloading by people (such as Mark).
 
-## Architecture Diagram
-![finalprojdesign](https://cloud.githubusercontent.com/assets/12664198/14360127/db9d94c8-fcc2-11e5-849c-176db2a35bc4.jpg)
-
-The way the game will work is the user will start the game and the program will then generate a random objects at random X and Y positions off-screen. These objects will vary is size and trajectrory. The player will have to either move around or shoot the objects to avoid getting hit. The spacecraft that the user controls will have a health bar so after a certain amount of hits the game will end.
-
-The game runs in a loop.  Every 1/28 seconds (default of 2htdp/Universe) the game updates the positions of the objects based on time and velocity, updates the player position based on input, checks for collisions, and then renders a new frame.  This continues until the player's health gets to 0.
-
-The game objects are a hierarchy of entity objects.  Each entity has a position, sprite, and flag for death (whether or not to render the sprite or check it's coordinates).  Every other object in the game will inherit from this class.  The game loop knows how to render each object based on it's members it inherits from the entity class.
-
-## Schedule
-### Current Progess
-Milestone one is complete and working. We have created a 2D world that randomly creates projectiles/asteriods and also a user interface that allows the user to be able to control the spacecraft to maneuver around the obsticles. Parts of milestone two have already been coded but are not included in the first submition.
-
-### First Milestone (Fri Apr 15)
-A 2D world that accepts input to move a spaceship sprite around the screen.  This signifies the core engine is complete and our concept works. 
-
-
-### Second Milestone (Fri Apr 22)
-Add features like health, sound, obstacles.  Fleshing out the features of the game, at this point we should have solid gameplay.
-
-### Final Presentation (last week of semester)
-Add more interactive things. Start page/intro.
-
-## Group Responsibilities
-
-### Lokesh Manchi @lokeshmanchi
-I will write the code that allows the user to move the spacecraft freely to avoid the obsticles and write code for sound.
-For the first milestone I will create the code for allowing the user to move the spacecraft.
-For the second milestone I will write code for the sound to make the game more immersive and create the health bar
-For the final milestone I will help create the start page and any other small details to make the game for lively.
-
-
-### Rob Russell @robdoesweb
-I'm writing the main game loop and hierarchy for objects.  I'll create the update loop and make design decisions for collision detection and rendering.  I'll focus on creating a clear set of classes that can be reused to expand the game and add more features and content easily.
+1. Click on release at the top of the page and download the most recent release
+2. After downloading the file extract it and place it anywhere
+3. Install rsound library on your computer throught the Dr.Racket package manager
+4. In the project release click on SpaceXplore.rkt, which is the file that starts the game
+5. A starter page will open up and you have to click on the right arrow key to initialize the game (first image in the screenshot section of this file)
+6. A second window will pop up (second image in the screenshot section) and this is the game. The controls are the arrow keys to move around and the space bar to shoot
+7. Dont get hit!
 
