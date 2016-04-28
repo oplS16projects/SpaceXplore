@@ -5,6 +5,9 @@
 
 (require 2htdp/universe 2htdp/image lang/posn)
 (require rsound)
+(require picturing-programs)
+(require test-engine/racket-tests)
+(provide game-start)
 
 ;;game state variables
 (define window-x 600)
