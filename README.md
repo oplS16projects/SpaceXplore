@@ -21,13 +21,28 @@ Identify the OPL concepts demonstrated in your project. Be brief. A simple list 
 
 ##External Technology and Libraries
 Briefly describe the existing technology you utilized, and how you used it. Provide a link to that technology(ies).
+####Libraries used:
+
+1. 2htdp/universe - [Racket-Universe](https://docs.racket-lang.org/teachpack/2htdpuniverse.html)
+2. 2htdp/image - [Racket-Images](https://docs.racket-lang.org/teachpack/2htdpimage.html)
+3. rsound - [Racket-Rsound] (https://docs.racket-lang.org/rsound/index.html)
+4. lang/posn
 
 ##Favorite Scheme Expressions
 ####Lokesh Manchi (a team member)
 Each team member should identify a favorite expression or procedure, written by them, and explain what it does. Why is it your favorite? What OPL philosophy does it embody?
 Remember code looks something like this:
 ```scheme
-(map (lambda (x) (foldr compose functions)) data)
+(define (handle-key-down world key)
+  (cond
+    [(key=? key "left") (player 'move-left)]
+    [(key=? key "right") (player 'move-right)]
+    [(key=? key "up") (player 'move-up)]
+    [(key=? key "down") (player 'move-down)]
+    [(key=? key " ") (player 'shoot)]
+    [else world]
+    )
+)
 ```
 ####Rob Russell (another team member)
 This expression reads in a regular expression and elegantly matches it against a pre-existing hashmap....
