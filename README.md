@@ -32,7 +32,7 @@ Briefly describe the existing technology you utilized, and how you used it. Prov
 ####Lokesh Manchi (a team member)
 
 This code allows the user to use the arrow keys on thier keyboard to interact with the game. The way it works is if the player hits lets say the right key, in the cond statement it hits the key=? key "right". This tells Racket to then call the key-expr function which in this case is (player 'move-right) on the current world. The result of the call is the current world.
-```scheme
+```racket
 (define (handle-key-down world key)
   (cond
     [(key=? key "left") (player 'move-left)]
