@@ -161,13 +161,14 @@
   (error "end of game"))
   
 ;; sounds
-
+(define astream (make-pstream))
+(define shoot1(rs-read "shoot.wav"))
+(define explosion1 (rs-read "explosion2.wav"))
 (define(shoot2)
-  (define shoot1(rs-read "shoot.wav"))
-  (play shoot1))
+  (pstream-play astream shoot1))
 
 (define (explosion)
-  (define explosion1(rs-read "explosion2.wav"))(play explosion1))
+  (pstream-play astream explosion1))
 
 ;;instantiate player object
 (define player (make-player (cons 100 100) (cons 10 10) player-sprite-straight))
@@ -216,9 +217,9 @@
 (make-starfield 50)
 
 (define (make-projectile)
-  (define pos (cons (player 'x) (+ 50 (player 'y))))
+  (define pos (cons (player 'x) (player 'y)))
   (define speed 15)
-  (define entity (make-entity pos (cons 2 4) (rectangle 4 15 "solid" "red") #f))
+  (define entity (make-entity pos (cons 4 15) (rectangle 4 15 "solid" "red") #f))
   (define (update dt)
     ((entity 'set-y) (+ speed (entity 'y))))
 
@@ -228,6 +229,13 @@
   dispatch)
 
 ;;collision detection
+
+;if (rect1.x < rect2.x + rect2.width &&
+;   rect1.x + rect1.width > rect2.x &&
+;   rect1.y < rect2.y + rect2.height &&
+;   rect1.height + rect1.y > rect2.y) {
+;    // collision detected!
+;}
 
 (define (collides obj1 obj2)
   (define x1 (obj1 'x))
