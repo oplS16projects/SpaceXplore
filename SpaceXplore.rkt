@@ -272,9 +272,13 @@
       #t
       #f))
 
+(define (alive? ent)
+  (eq? (ent 'alive?) #t))
+
+(define collidables (filter (λ (ent) (and (alive? ent) (ent 'collidable))) ents))
 (define (check-collisions)
   ;;get all the objects that can effect player or projectiles
-  (define collidables (filter (λ (ent) (and (alive? ent) (ent 'collidable))) ents))
+  (set! collidables (filter (λ (ent) (and (alive? ent) (ent 'collidable))) ents))
   ;;check if the collidable hit the player
   (map
    (λ (collidable) (if (collides player collidable)
@@ -357,9 +361,13 @@
     )
   )
 
-;;to filter if enemies should be rendered
-(define (alive? ent)
-  (eq? (ent 'alive?) #t))
+
+
+;;render initialization
+(define ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
+(define ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
+(define screen '())
+(define game-over-text (text "GAME OVER!!! YOU DIED!!!" 36 "red"))
 
 (define (render x)
   ;  (define asteroids-pos (map (λ (asteroid) (make-posn (asteroid 'x) (asteroid 'y))) (filter alive? asteroids)))
@@ -375,11 +383,10 @@
   ;  ;(define player-health(underlay/xy player-stars-bg))
   ;  (define player-stars-bg-proj (place-images projectile-sprites projectile-pos player-stars-bg))
   ;(define player-stars-bg-proj-ui (underlay/xy player-stars-bg-proj x y sprite)
-  (define ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
-  (define ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
-  (define screen '())
+  (set! ents-pos (map (λ (entity) (make-posn (entity 'x) (entity 'y))) (filter alive? ents)))
+  (set! ents-sprites (map (λ (entity) (entity 'sprite)) (filter alive? ents)))
   (set! screen (place-images ents-sprites ents-pos background))
-  (define game-over-text (text "GAME OVER!!! YOU DIED!!!" 36 "red"))
+  
   (if game-over
       (set! screen (place-images (list game-over-text) (list (make-posn 250 250)) background))
       void)
