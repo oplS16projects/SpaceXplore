@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Spacexplore by oplS16projects</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Spacexplore</h1>
+        <p class="header"></p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/oplS16projects/SpaceXplore/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/oplS16projects/SpaceXplore/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/oplS16projects/SpaceXplore">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/oplS16projects">oplS16projects</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="fp7-webpage-spacexplore" class="anchor" href="#fp7-webpage-spacexplore" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FP7-webpage SpaceXplore</h1>
+
+<h2>
+<a id="authors" class="anchor" href="#authors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors</h2>
+
+<p>Lokesh Manchi (<a href="https://github.com/lokeshmanchi" class="user-mention">@lokeshmanchi</a>)</p>
+
+<p>Rob Russell(<a href="https://github.com/robdoesweb" class="user-mention">@robdoesweb</a>)</p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>We're designing a 2D space shooting game that uses graphics and sound to make it fun and interesting. The user will be able to control a spaceship and the purpose of the game is to avoid and shoot the obstacles that are ahead.</p>
+
+<h2>
+<a id="screenshot" class="anchor" href="#screenshot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Screenshot</h2>
+
+<p><img src="startpage-everything.png" alt="screenshot showing game-start">
+<img src="game-play.png" alt="screenshot showing game-play"></p>
+
+<h2>
+<a id="concepts-demonstrated" class="anchor" href="#concepts-demonstrated" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Concepts Demonstrated</h2>
+
+<ul>
+<li>
+<strong>Object Inheritance</strong> is used to expand a basic entity class into the different game objects.</li>
+<li>
+<strong>Map and Filter</strong> are used to extract data from certain game objects to update and render them.</li>
+<li>
+<strong>Data Abstraction</strong> is used to hide the way game objects store values like their position and size</li>
+</ul>
+
+<h2>
+<a id="external-technology-and-libraries" class="anchor" href="#external-technology-and-libraries" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>External Technology and Libraries</h2>
+
+<p>Briefly describe the existing technology you utilized, and how you used it. Provide a link to that technology(ies).</p>
+
+<h4>
+<a id="libraries-used" class="anchor" href="#libraries-used" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Libraries used:</h4>
+
+<ol>
+<li>2htdp/universe - <a href="https://docs.racket-lang.org/teachpack/2htdpuniverse.html">Racket-Universe</a>
+</li>
+<li>2htdp/image - <a href="https://docs.racket-lang.org/teachpack/2htdpimage.html">Racket-Images</a>
+</li>
+<li>rsound - <a href="https://docs.racket-lang.org/rsound/index.html">Racket-Rsound</a>
+</li>
+<li>lang/posn</li>
+</ol>
+
+<h2>
+<a id="favorite-scheme-expressions" class="anchor" href="#favorite-scheme-expressions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Favorite Scheme Expressions</h2>
+
+<h4>
+<a id="lokesh-manchi-a-team-member" class="anchor" href="#lokesh-manchi-a-team-member" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lokesh Manchi (a team member)</h4>
+
+<p>This code allows the user to use the arrow keys on thier keyboard to interact with the game. The way it works is if the player hits lets say the right key, in the cond statement it hits the key=? key "right". This tells Racket to then call the key-expr function which in this case is (player 'move-right) on the current world. The result of the call is the current world.</p>
+
+<div class="highlight highlight-source-racket"><pre>(<span class="pl-en">define</span> (handle-key-down world key)
+  (<span class="pl-en">cond</span>
+    [(key=? key <span class="pl-c1">"<span class="pl-c1">left</span>"</span>) (player <span class="pl-c1">'move-left</span>)]
+    [(key=? key <span class="pl-c1">"<span class="pl-c1">right</span>"</span>) (player <span class="pl-c1">'move-right</span>)]
+    [(key=? key <span class="pl-c1">"<span class="pl-c1">up</span>"</span>) (player <span class="pl-c1">'move-up</span>)]
+    [(key=? key <span class="pl-c1">"<span class="pl-c1">down</span>"</span>) (player <span class="pl-c1">'move-down</span>)]
+    [(key=? key <span class="pl-c1">"<span class="pl-c1"> </span>"</span>) (player <span class="pl-c1">'shoot</span>)]
+    [<span class="pl-en">else</span> world]
+    )
+)</pre></div>
+
+<h4>
+<a id="rob-russell-another-team-member" class="anchor" href="#rob-russell-another-team-member" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rob Russell (another team member)</h4>
+
+<p>The render function filters through alive entities and maps their positions and sprites to new lists used to render everything in one sweet step.</p>
+
+<div class="highlight highlight-source-scheme"><pre>(<span class="pl-k">define</span> (<span class="pl-en">render</span><span class="pl-smi"> x</span>)
+  (<span class="pl-k">define</span> <span class="pl-smi">ents-pos</span> (<span class="pl-c1">map</span> (λ (entity) (make-posn (entity <span class="pl-c1">'x</span>) (entity <span class="pl-c1">'y</span>))) (filter alive? ents)))
+  (<span class="pl-k">define</span> <span class="pl-smi">ents-sprites</span> (<span class="pl-c1">map</span> (λ (entity) (entity <span class="pl-c1">'sprite</span>)) (filter alive? ents)))
+  (<span class="pl-k">define</span> <span class="pl-smi">screen</span> '())
+  (<span class="pl-k">set!</span> screen (place-images ents-sprites ents-pos background))
+  (<span class="pl-k">define</span> <span class="pl-smi">game-over-text</span> (text <span class="pl-s"><span class="pl-pds">"</span>GAME OVER!!! YOU DIED!!!<span class="pl-pds">"</span></span> <span class="pl-c1">36</span> <span class="pl-s"><span class="pl-pds">"</span>red<span class="pl-pds">"</span></span>))
+  (<span class="pl-k">if</span> game-over
+      (<span class="pl-k">set!</span> screen (place-images (<span class="pl-c1">list</span> game-over-text) (<span class="pl-c1">list</span> (make-posn <span class="pl-c1">250</span> <span class="pl-c1">250</span>)) background))
+      void)
+  screen
+  )</pre></div>
+
+<h2>
+<a id="additional-remarks" class="anchor" href="#additional-remarks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Remarks</h2>
+
+<p>Building this game was really fun and the structure that exists here is now easy to expand to add more entities with custom updates (ie.. enemy ships that shoot back at the player).</p>
+
+<h1>
+<a id="how-to-download-and-run" class="anchor" href="#how-to-download-and-run" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to Download and Run</h1>
+
+<p>You may want to link to your latest release for easy downloading by people (such as Mark).</p>
+
+<ol>
+<li>Click on release at the top of the page and download the most recent release</li>
+<li>After downloading the file extract it and place it anywhere</li>
+<li>Install rsound library on your computer throught the Dr.Racket package manager</li>
+<li>In the project release click on SpaceXplore.rkt, which is the file that starts the game</li>
+<li>A starter page will open up and you have to press spacebar to initialize the game (first image in the screenshot section of this file)</li>
+<li>A second window will pop up (second image in the screenshot section) and this is the game. The controls are the arrow keys to move around and the space bar to shoot</li>
+<li>Dont get hit!</li>
+</ol>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
