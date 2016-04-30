@@ -6,7 +6,7 @@ Lokesh Manchi (@lokeshmanchi)
 Rob Russell(@robdoesweb)
 
 ##Overview
-We're designing a 2D space shooting game that uses graphics and sound to make it fun and interesting. The user will be able to control a spaceship and the purpose of the game is to avoid the obstacles that are ahead.
+We're designing a 2D space shooting game that uses graphics and sound to make it fun and interesting. The user will be able to control a spaceship and the purpose of the game is to avoid and shoot the obstacles that are ahead.
 
 ##Screenshot
 ![screenshot showing game-start](startpage-everything.png)
@@ -14,10 +14,9 @@ We're designing a 2D space shooting game that uses graphics and sound to make it
 
 
 ##Concepts Demonstrated
-Identify the OPL concepts demonstrated in your project. Be brief. A simple list and example is sufficient. 
-* **Data abstraction** is used to provide access to the elements of the RSS feed.
-* The objects in the OpenGL world are represented with **recursive data structures.**
-* **Symbolic language processing techniques** are used in the parser.
+* **Object Inheritance** is used to expand a basic entity class into the different game objects.
+* **Map and Filter** are used to extract data from certain game objects to update and render them.
+* **Data Abstraction** is used to hide the way game objects store values like their position and size
 
 ##External Technology and Libraries
 Briefly describe the existing technology you utilized, and how you used it. Provide a link to that technology(ies).
@@ -61,7 +60,7 @@ The render function filters through alive entities and maps their positions and 
 ```
 
 ##Additional Remarks
-Anything else you want to say in your report. Can rename or remove this section.
+Building this game was really fun and the structure that exists here is now easy to expand to add more entities with custom updates (ie.. enemy ships that shoot back at the player).
 
 #How to Download and Run
 You may want to link to your latest release for easy downloading by people (such as Mark).
@@ -70,7 +69,7 @@ You may want to link to your latest release for easy downloading by people (such
 2. After downloading the file extract it and place it anywhere
 3. Install rsound library on your computer throught the Dr.Racket package manager
 4. In the project release click on SpaceXplore.rkt, which is the file that starts the game
-5. A starter page will open up and you have to click on the right arrow key to initialize the game (first image in the screenshot section of this file)
+5. A starter page will open up and you have to press spacebar to initialize the game (first image in the screenshot section of this file)
 6. A second window will pop up (second image in the screenshot section) and this is the game. The controls are the arrow keys to move around and the space bar to shoot
 7. Dont get hit!
 
